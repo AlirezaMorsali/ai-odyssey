@@ -1,0 +1,7 @@
+numpy
+jupyterlab
+torch
+graphviz
+
+
+matplotlib
