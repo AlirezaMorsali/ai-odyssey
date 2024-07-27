@@ -4,16 +4,19 @@ from graphviz import Digraph
 
 
 class Value:
-    def __init__(self, data, _children=(), label="") -> None:
+    def __init__(self, data, _children=(), label="", _op="") -> None:
         self.data = data
         self._prev = set(_children)
+        self.label = label
+        self.grad = 0
+        self._op = _op
 
     def backward(self):
         # ???
         return None
 
     def __repr__(self) -> str:
-        return f"Value(data={self.data}) | children={self._prev}"
+        return f"Value(data={self.data}) | children={self._prev} | Label:{self.label} "
 
     def __add__(self, other):
         x = self.data + other.data

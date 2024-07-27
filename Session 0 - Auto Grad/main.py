@@ -1,4 +1,4 @@
-from lighter import Value
+from lighter import Value, draw_dot
 
 x1 = Value(3.0)
 x2 = Value(6.0)
@@ -10,8 +10,8 @@ b = Value(0.3)
 
 y = ((x1 * w1) + (x2 * w2)) + b
 
+draw_dot(y)
 print(f"{y=}")
-print(f"{a=}")
 print(f"{b=}")
 
 
