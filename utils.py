@@ -68,7 +68,8 @@ def plot_distribution(samples, pdf_func, x_range, num_bins=1000):
     plt.show()
 
 
-x_range = (0, 10)
-num_samples = 10000
-samples = generate_random_numbers(custom_pdf, x_range, num_samples)
-plot_distribution(samples, custom_pdf, x_range)
+if __name__ == "__main__":
+    x_range = (0, 10)
+    num_samples = 10000
+    samples = generate_random_numbers(custom_pdf, x_range, num_samples)
+    plot_distribution(samples, custom_pdf, x_range)

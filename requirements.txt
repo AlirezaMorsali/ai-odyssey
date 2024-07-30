@@ -1,7 +1,10 @@
 numpy
 jupyterlab
-torch
 graphviz
+torch
+torchvision
 
+tqdm
 
+wandb
 matplotlib
