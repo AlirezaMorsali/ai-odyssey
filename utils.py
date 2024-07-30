@@ -40,11 +40,27 @@ def generate_random_numbers(pdf_func, x_range, num_samples=1000):
     return np.array(samples)
 
 
-# Step 4: Plot the distribution of generated data
+def plot_data(samples, num_bins=1000):
+    plt.figure(figsize=(10, 6))
+
+    plt.hist(
+        samples,
+        bins=num_bins,
+        density=True,
+        alpha=0.6,
+        color="g",
+        label="Generated Data",
+    )
+    plt.xlabel("x")
+    plt.ylabel("Density")
+    plt.legend()
+    plt.title("Generated Data Distribution")
+    plt.show()
+
+
 def plot_distribution(samples, pdf_func, x_range, num_bins=1000):
     plt.figure(figsize=(10, 6))
 
-    # Histogram of generated samples
     plt.hist(
         samples,
         bins=num_bins,
@@ -54,7 +70,6 @@ def plot_distribution(samples, pdf_func, x_range, num_bins=1000):
         label="Generated Data",
     )
 
-    # Plot the original PDF
     x_values = np.linspace(x_range[0], x_range[1], 1000)
     pdf_values = [pdf_func(x) for x in x_values]
     normalization_constant = np.trapz(pdf_values, x_values)
