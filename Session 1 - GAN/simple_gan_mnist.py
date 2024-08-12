@@ -8,6 +8,7 @@ from torchvision.utils import make_grid
 from tqdm.auto import tqdm
 
 torch.manual_seed(0)  # Set for testing purposes, please do not change!
+plt.ion()  # Enable interactive mode
 
 cur_step = 0
 mean_generator_loss = 0
@@ -29,11 +30,46 @@ else:
     print("Using CPU device.")
 
 
-def show_tensor_images(image_tensor, num_images=25, size=(1, 28, 28)):
-    image_unflat = image_tensor.detach().cpu().view(-1, *size)
-    image_grid = make_grid(image_unflat[:num_images], nrow=5)
-    plt.imshow(image_grid.permute(1, 2, 0).squeeze())
-    plt.show()
+def initialize_plot(num_images=25, size=(1, 28, 28)):
+    fig, axs = plt.subplots(1, 2, figsize=(10, 5))
+    axs[0].set_title("Generated Images")
+    axs[1].set_title("Real Images")
+    for ax in axs:
+        ax.axis("off")
+
+    # Initialize image grids
+    fake_images_placeholder = torch.zeros((num_images, *size))
+    real_images_placeholder = torch.zeros((num_images, *size))
+
+    fake_image_grid = make_grid(fake_images_placeholder, nrow=5)
+    real_image_grid = make_grid(real_images_placeholder, nrow=5)
+
+    fake_img = axs[0].imshow(fake_image_grid.permute(1, 2, 0).squeeze(), animated=True)
+    real_img = axs[1].imshow(real_image_grid.permute(1, 2, 0).squeeze(), animated=True)
+
+    return fig, axs, fake_img, real_img
+
+
+def update_plot(
+    fake_images, real_images, fake_img, real_img, num_images=25, size=(1, 28, 28)
+):
+    fake_unflat = fake_images.detach().cpu().view(-1, *size)
+    fake_grid = make_grid(fake_unflat[:num_images], nrow=5)
+    real_unflat = real_images.detach().cpu().view(-1, *size)
+    real_grid = make_grid(real_unflat[:num_images], nrow=5)
+
+    fake_img.set_data(fake_grid.permute(1, 2, 0).squeeze())
+    real_img.set_data(real_grid.permute(1, 2, 0).squeeze())
+
+    plt.draw()  # Update the figure
+    plt.pause(0.001)  # Pause to allow the figure to update
+
+
+# def show_tensor_images(image_tensor, num_images=25, size=(1, 28, 28)):
+#     image_unflat = image_tensor.detach().cpu().view(-1, *size)
+#     image_grid = make_grid(image_unflat[:num_images], nrow=5)
+#     plt.imshow(image_grid.permute(1, 2, 0).squeeze())
+#     plt.show()
 
 
 def get_generator_block(input_dim, output_dim):
@@ -103,6 +139,7 @@ criterion = nn.BCEWithLogitsLoss()
 
 gen_opt = torch.optim.Adam(gen.parameters(), lr=lr)
 disc_opt = torch.optim.Adam(disc.parameters(), lr=lr)
+fig, axs, fake_img, real_img = initialize_plot()
 
 for epoch in range(n_epochs):
     for real, _ in tqdm(dataloader):
@@ -148,8 +185,8 @@ for epoch in range(n_epochs):
             )
             fake_noise = torch.randn(n_samples, z_dim, device=device)
             fake = gen(fake_noise)
-            show_tensor_images(fake)
-            show_tensor_images(real_images)
+            update_plot(fake, real_images, fake_img, real_img)
+
             mean_generator_loss = 0
             mean_discriminator_loss = 0
         cur_step += 1
