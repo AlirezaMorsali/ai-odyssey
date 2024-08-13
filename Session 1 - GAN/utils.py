@@ -75,6 +75,7 @@ def plot_distribution(samples, pdf_func, x_range, num_bins=1000):
     normalization_constant = np.trapz(pdf_values, x_values)
     pdf_values = [val / normalization_constant for val in pdf_values]
     plt.plot(x_values, pdf_values, "r-", lw=2, label="PDF")
+    plt.ylim(0, 1)
 
     plt.xlabel("x")
     plt.ylabel("Density")
