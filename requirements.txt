@@ -3,6 +3,7 @@ jupyterlab
 graphviz
 torch
 torchvision
+scikit_learn
 
 tqdm
 
