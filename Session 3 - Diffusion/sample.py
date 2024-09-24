@@ -214,10 +214,10 @@ def train(diffusion_model, optimizer, batch_size, nb_epochs, device):
 
         if epoch % 5000 == 0:
             plt.plot(training_loss)
-            plt.savefig(f"training_loss_epoch_{epoch}.png")
+            plt.savefig(f"results/training_loss_epoch_{epoch}.png")
             plt.close()
 
-            plot(diffusion_model, f"training_epoch_{epoch}.png", device)
+            plot(diffusion_model, f"results/training_epoch_{epoch}.png", device)
 
     return training_loss
 
